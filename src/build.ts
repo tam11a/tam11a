@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { contact, projects, site } from './data.ts';
+import { careerStart, contact, projects, site, yearsSince } from './data.ts';
 import { loadLive } from './lib/github.ts';
 import { previewHtml } from './preview.ts';
 import { about, aboutMobile } from './sections/about.ts';
@@ -33,7 +33,7 @@ const gh = 'https://github.com/tam11a';
 // Sections parked for now; flip to true to bring them back.
 const SHOW = { projects: false, activity: false };
 const layout: Block[] = [
-  { img: { file: 'about.svg', render: () => about(data), mobile: () => aboutMobile(data), href: site, alt: 'About — Senior Software Engineer in Dhaka, Bangladesh. 4+ years. Open to work.' } },
+  { img: { file: 'about.svg', render: () => about(data), mobile: () => aboutMobile(data), href: site, alt: `About — Senior Software Engineer in Dhaka, Bangladesh. ${yearsSince(careerStart)}+ years. Open to work.` } },
   { img: { file: 'proficiencies.svg', render: proficienciesCard, mobile: proficienciesMobile, href: site, alt: 'Proficiencies — skills, tech stack, tools and languages' } },
   { img: { file: 'work.svg', render: workCard, mobile: workMobile, href: `${site}/experience`, alt: 'Work — Cuebites Digital, Defined Solution, Reserveit, Planet X' } },
   { img: { file: 'honors.svg', render: honorsCard, mobile: honorsMobile, href: `${site}/honors`, alt: 'Honors — CSE Fest 2K24 Hackathon champion, NASA Space Apps national champion 2020' } },

@@ -1,4 +1,17 @@
 // Profile content. Stats with a `live` key are filled from the GitHub API at build time.
+
+/** First engineering role (Planet X, March 2021); experience is counted from here. */
+export const careerStart = '2021-03-01';
+
+/** Whole years since `start`. The hourly build keeps this current. */
+export function yearsSince(start: string, now = new Date()) {
+  const s = new Date(start);
+  let years = now.getFullYear() - s.getFullYear();
+  if (now.getMonth() < s.getMonth() || (now.getMonth() === s.getMonth() && now.getDate() < s.getDate())) years--;
+  return years;
+}
+const years = yearsSince(careerStart);
+
 export const profile = {
   handle: 'tam11a',
   name: 'Ibrahim Sadik Tamim',
@@ -7,12 +20,12 @@ export const profile = {
     facts: [
       { label: 'Role', value: 'Senior Software Engineer' },
       { label: 'Based in', value: 'Dhaka, Bangladesh' },
-      { label: 'Experience', value: '4+ Years' },
+      { label: 'Experience', value: `${years}+ Years` },
       { label: 'Status', value: 'Open to work', status: true },
     ],
     bio: 'I bridge strategic vision with technical expertise. Proficient in an assortment of technologies including JavaScript, TypeScript, C#, and Python. My focus is ensuring products are robust, scalable, and user-focused.',
     stats: [
-      { value: '4', suffix: '+', label: 'Years shipping' },
+      { value: String(years), suffix: '+', label: 'Years shipping' },
       { live: 'repos', label: 'Repositories' },
       { live: 'contributions', label: 'Contributions / yr' },
     ] as { value?: string; suffix?: string; label: string; live?: 'repos' | 'contributions' }[],
