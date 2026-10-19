@@ -24,7 +24,7 @@ const snake = existsSync(snakePath) ? readFileSync(snakePath, 'utf8') : undefine
 console.log(`data: ${data.source}, ${data.contributions} contributions, snake: ${snake ? 'yes' : 'no (heatmap)'}`);
 
 interface Img { file: string; render: () => Promise<string>; href: string; alt: string }
-type Block = { img: Img } | { row: Img[]; width: string } | { details: string; img: Img };
+type Block = { img: Img } | { row: Img[]; width: string };
 
 const gh = 'https://github.com/tam11a';
 // Sections parked for now; flip to true to bring them back.
@@ -57,7 +57,7 @@ const layout: Block[] = [
     width: '19%',
     row: contact.links.map((l, i) => ({ file: `btn-${l.id}.svg`, render: () => contactButton(i), href: l.href, alt: l.label })),
   },
-  { details: '🕹️ PRESS START', img: { file: 'egg.svg', render: () => egg(data), href: site, alt: 'Secret level: pixel-art tam runs through Dhaka, jumping bugs and collecting commits' } },
+  { img: { file: 'egg.svg', render: () => egg(data), href: site, alt: 'Pixel-art tam runs through Dhaka at night, jumping bugs and collecting commits' } },
 ];
 
 const imgs = layout.flatMap((b) => ('row' in b ? b.row : [b.img]));
@@ -74,7 +74,6 @@ function readme(base: string) {
   return layout
     .map((b) => {
       if ('row' in b) return `<p>\n${b.row.map((i) => tag(i, b.width)).join('\n')}\n</p>`;
-      if ('details' in b) return `<details>\n<summary><samp>${b.details}</samp></summary>\n<br>\n\n${tag(b.img)}\n\n</details>`;
       return tag(b.img);
     })
     .join('\n\n');

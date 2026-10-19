@@ -20,10 +20,4 @@
 <a href="https://tam11a.dev/resume_ibrahimsadiktamim.pdf"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/btn-resume.svg" alt="Resume" width="19%"></a>
 </p>
 
-<details>
-<summary><samp>🕹️ PRESS START</samp></summary>
-<br>
-
-<a href="https://tam11a.dev"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/egg.svg" alt="Secret level: pixel-art tam runs through Dhaka, jumping bugs and collecting commits" width="100%"></a>
-
-</details>
+<a href="https://tam11a.dev"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/egg.svg" alt="Pixel-art tam runs through Dhaka at night, jumping bugs and collecting commits" width="100%"></a>

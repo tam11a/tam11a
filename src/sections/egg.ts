@@ -54,7 +54,7 @@ function skyline() {
   return out.join('');
 }
 
-/** Hidden level behind "▶ press start": tam runs through Dhaka, hops bugs, grabs commits. */
+/** Closing pixel level: tam runs through Dhaka, hops bugs, grabs commits. */
 export async function egg(data: Live) {
   const fonts = new FontKit();
   const r = rng(3);
@@ -81,7 +81,7 @@ export async function egg(data: Live) {
   ${mono(fonts, '1UP  TAM11A', 40, 44, { fill: color.fg, size: 14, tracking: 2 })}
   ${mono(fonts, 'LEVEL 1-1 · DHAKA', W / 2, 44, { anchor: 'middle', size: 14, tracking: 2 })}
   ${mono(fonts, `COMMITS ${data.contributions.toLocaleString('en-US')}`, W - 40, 44, { anchor: 'end', fill: color.accent, size: 14, tracking: 2 })}
-  <g class="blink">${mono(fonts, 'Secret level found — thanks for scrolling this far', W / 2, H - 22, { anchor: 'middle', size: 12, tracking: 2 })}</g>`;
+  <g class="blink">${mono(fonts, 'Thanks for scrolling this far', W / 2, H - 22, { anchor: 'middle', size: 12, tracking: 2 })}</g>`;
 
   const body = `
   ${stars}
@@ -127,7 +127,7 @@ export async function egg(data: Live) {
 
   return card({
     height: H,
-    title: 'Secret level — tam11a',
+    title: 'Level 1-1 — tam11a',
     desc: `Pixel-art mini level: tam runs through Dhaka at night, jumping over bugs and collecting commits. ${data.contributions} commits this year.`,
     css,
     body,
