@@ -19,7 +19,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Contribution snake, coloured with the same orange ramp as src/sections/live.ts.
       - uses: Platane/snk/svg-only@v3
@@ -27,7 +27,7 @@ jobs:
           github_user_name: ${{ github.repository_owner }}
           outputs: dist/snake.svg?color_snake=#F5F5F5&color_dots=#161616,#3d1002,#6e1c03,#ac2c04,#F53F06
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
