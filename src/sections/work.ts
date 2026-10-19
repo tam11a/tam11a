@@ -43,7 +43,7 @@ export async function workCard() {
         .join('');
       const tagY = y0 + 58 + (lines.length - 1) * 25 + 20;
       const tags = pills(fonts, r.tags, X, tagY, W - P);
-      y = tagY + 24 + 46;
+      y = tagY + 24 + 72; // breathing room between a role's tags and the next role
       return `<g class="reveal" style="animation-delay:${delay.toFixed(2)}s">
         <text x="${X}" y="${y0}" fill="${color.fg}" style="${fontStyle('bodyBold', 24)}">${esc(company)}</text>
         ${country}${current}
