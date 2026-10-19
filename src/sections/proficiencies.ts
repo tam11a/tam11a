@@ -40,17 +40,18 @@ export async function proficienciesCard() {
   const fonts = new FontKit();
   const { groups, marquee, intro } = proficiencies;
 
-  const introLines = wrap('body', fonts.use('body', intro), 18, 270)
-    .map((l, i) => `<tspan x="${P}" y="${200 + i * 28}">${esc(l)}</tspan>`)
+  // Header row like Work: title left, intro right, divider, then content full width.
+  const TOP = 206;
+  const introLines = wrap('body', fonts.use('body', intro), 19, W - P - COL)
+    .map((l, i) => `<tspan x="${COL}" y="${100 + i * 30}">${esc(l)}</tspan>`)
     .join('');
 
-  // 2 × 2 grid of lists, labels and items straight from the portfolio.
-  const colW = (W - P - COL) / 2;
-  const rowH = 214;
+  // Four lists side by side, labels and items straight from the portfolio.
+  const colW = (W - 2 * P) / groups.length;
   const lists = groups
     .map((g, i) => {
-      const x = COL + (i % 2) * colW;
-      const y = 72 + Math.floor(i / 2) * rowH;
+      const x = P + i * colW;
+      const y = TOP + 56;
       const items = g.items
         .map((it, k) => {
           const iy = y + 38 + k * 30;
@@ -63,7 +64,8 @@ export async function proficienciesCard() {
     })
     .join('');
 
-  const ruleY = 72 + rowH + 30 + 4 * 30 + 10;
+  const longest = Math.max(...groups.map((g) => g.items.length));
+  const ruleY = TOP + 56 + 38 + (longest - 1) * 30 + 40;
   const rowA = marqueeRow(fonts, marquee[0], ruleY + 64, false, 'mqA');
   const rowB = marqueeRow(fonts, marquee[1], ruleY + 120, true, 'mqB');
   const H = ruleY + 160;
@@ -71,7 +73,9 @@ export async function proficienciesCard() {
   const body = `
   <g class="glow"><circle cx="${W}" cy="0" r="380" fill="url(#glowP)"/></g>
   ${header(fonts, '# 002', 'Proficiencies')}
-  <text class="reveal" style="animation-delay:.2s;${fontStyle('body', 18)}" fill="${color.subtle}">${introLines}</text>
+  <text class="reveal" style="animation-delay:.2s;${fontStyle('body', 19)}" fill="${color.subtle}">${introLines}</text>
+  <g class="reveal" style="animation-delay:.3s">${mono(fonts, `${groups.length} groups · ${marquee.flat().length} technologies`, COL, 166)}</g>
+  <line class="rule" x1="${P}" x2="${W - P}" y1="${TOP}" y2="${TOP}" stroke="${color.line}" style="animation-delay:.3s"/>
   ${lists}
   <line class="rule" x1="${P}" x2="${W - P}" y1="${ruleY}" y2="${ruleY}" stroke="${color.line}" style="animation-delay:.6s"/>
   <g mask="url(#edges)" class="reveal" style="animation-delay:.7s">${rowA.body}${rowB.body}</g>`;
