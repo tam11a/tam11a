@@ -1,14 +1,22 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { contact, projects, site } from './data.ts';
 import { loadLive } from './lib/github.ts';
 import { previewHtml } from './preview.ts';
 import { about } from './sections/about.ts';
 import { activity } from './sections/activity.ts';
+import { contactButton, contactCard } from './sections/contact.ts';
+import { egg } from './sections/egg.ts';
 import { hero } from './sections/hero.ts';
+import { honorsCard } from './sections/honors.ts';
 import { live } from './sections/live.ts';
+import { proficienciesCard } from './sections/proficiencies.ts';
+import { projectCard, projectsHeader } from './sections/projects.ts';
+import { workCard } from './sections/work.ts';
 
 // dist/ is what the workflow publishes to the `output` branch. snake.svg is dropped
 // there by Platane/snk earlier in the same job; local builds fall back to our heatmap.
 const OUT = 'dist';
+const PUBLISHED = 'https://raw.githubusercontent.com/tam11a/tam11a/output';
 mkdirSync(OUT, { recursive: true });
 
 const data = await loadLive();
@@ -16,18 +24,56 @@ const snakePath = `${OUT}/snake.svg`;
 const snake = existsSync(snakePath) ? readFileSync(snakePath, 'utf8') : undefined;
 console.log(`data: ${data.source}, ${data.contributions} contributions, snake: ${snake ? 'yes' : 'no (heatmap)'}`);
 
-const profileUrl = 'https://github.com/tam11a';
-const sections = [
-  { file: 'hero.svg', render: () => hero(data), href: 'https://tam11a.dev', alt: 'tam. — Creative Software Engineer based in Dhaka' },
-  { file: 'about.svg', render: () => about(data), href: 'https://tam11a.dev', alt: 'About — Senior Software Engineer, Dhaka, open to work' },
-  { file: 'live.svg', render: () => live(data, snake), href: profileUrl, alt: 'Live GitHub stats, contribution graph and languages' },
-  { file: 'activity.svg', render: () => activity(data), href: `${profileUrl}?tab=repositories`, alt: 'Recently active repositories' },
+interface Img { file: string; render: () => Promise<string>; href: string; alt: string }
+type Block = { img: Img } | { row: Img[]; width: string } | { details: string; img: Img };
+
+const gh = 'https://github.com/tam11a';
+const layout: Block[] = [
+  { img: { file: 'hero.svg', render: () => hero(data), href: site, alt: 'tam. — Ibrahim Sadik Tamim, Creative Software Engineer based in Dhaka' } },
+  { img: { file: 'about.svg', render: () => about(data), href: site, alt: 'About — Senior Software Engineer in Dhaka, Bangladesh. 4+ years. Open to work.' } },
+  { img: { file: 'proficiencies.svg', render: proficienciesCard, href: site, alt: 'Proficiencies — skills, tech stack, tools and languages' } },
+  { img: { file: 'work.svg', render: workCard, href: `${site}/experience`, alt: 'Work — Defined Solution, Cuebites Digital, Reserveit, Planet X' } },
+  { img: { file: 'honors.svg', render: honorsCard, href: `${site}/honors`, alt: 'Honors — CSE Fest 2K24 Hackathon champion, NASA Space Apps national champion 2020' } },
+  { img: { file: 'projects.svg', render: projectsHeader, href: `${site}/projects`, alt: 'Projects' } },
+  ...[0, 2, 4].map((k) => ({
+    width: '49%',
+    row: [k, k + 1].map((i) => ({
+      file: `project-${i + 1}.svg`,
+      render: () => projectCard(i),
+      href: `${site}/projects/${projects[i].slug}`,
+      alt: `${projects[i].name} — ${projects[i].summary}`,
+    })),
+  })),
+  { img: { file: 'live.svg', render: () => live(data, snake), href: gh, alt: 'Live GitHub stats: contributions, streaks, stars, contribution snake and top languages' } },
+  { img: { file: 'activity.svg', render: () => activity(data), href: `${gh}?tab=repositories`, alt: 'Recently active public repositories' } },
+  { img: { file: 'contact.svg', render: () => contactCard(), href: contact.links[0].href, alt: `Contact — ${contact.email}` } },
+  {
+    width: '19%',
+    row: contact.links.map((l, i) => ({ file: `btn-${l.id}.svg`, render: () => contactButton(i), href: l.href, alt: l.label })),
+  },
+  { details: '🕹️ PRESS START', img: { file: 'egg.svg', render: () => egg(data), href: site, alt: 'Secret level: pixel-art tam runs through Dhaka, jumping bugs and collecting commits' } },
 ];
 
-for (const s of sections) {
+const imgs = layout.flatMap((b) => ('row' in b ? b.row : [b.img]));
+for (const s of imgs) {
   const svg = await s.render();
   writeFileSync(`${OUT}/${s.file}`, svg);
-  console.log(`${OUT}/${s.file}  ${(Buffer.byteLength(svg) / 1024).toFixed(1)} KB`);
+  console.log(`${OUT}/${s.file.padEnd(20)} ${(Buffer.byteLength(svg) / 1024).toFixed(1).padStart(5)} KB`);
 }
-writeFileSync('preview.html', previewHtml(sections.map((s) => ({ ...s, file: `${OUT}/${s.file}` }))));
-console.log('preview.html');
+
+/** README is plain HTML so the same markup drives both GitHub and the local preview. */
+function readme(base: string) {
+  const tag = (i: Img, width = '100%') =>
+    `<a href="${i.href}"><img src="${base}/${i.file}" alt="${i.alt.replace(/"/g, '&quot;')}" width="${width}"></a>`;
+  return layout
+    .map((b) => {
+      if ('row' in b) return `<p>\n${b.row.map((i) => tag(i, b.width)).join('\n')}\n</p>`;
+      if ('details' in b) return `<details>\n<summary><samp>${b.details}</samp></summary>\n<br>\n\n${tag(b.img)}\n\n</details>`;
+      return tag(b.img);
+    })
+    .join('\n\n');
+}
+
+writeFileSync('README.md', `<!-- Generated by \`npm run build\` (src/build.ts). Edit the sources, not this file. -->\n\n${readme(PUBLISHED)}\n`);
+writeFileSync('preview.html', previewHtml(readme(OUT)));
+console.log('README.md, preview.html');

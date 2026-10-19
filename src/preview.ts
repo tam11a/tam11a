@@ -1,8 +1,5 @@
 // Local preview that mimics GitHub's profile README frame: images only, no scripts inside the SVGs.
-export function previewHtml(sections: { file: string; href: string; alt: string }[]) {
-  const imgs = sections
-    .map((s) => `<a href="${s.href}"><img src="${s.file}" alt="${s.alt}" width="100%"></a>`)
-    .join('\n      ');
+export function previewHtml(readme: string) {
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Profile Preview</title>
@@ -16,7 +13,11 @@ export function previewHtml(sections: { file: string; href: string; alt: string 
   .box{width:100%;max-width:806px;border:1px solid #30363d;border-radius:6px;padding:24px;box-sizing:border-box;transition:max-width .3s}
   .box.mobile{max-width:380px;padding:16px}
   .path{font:12px ui-monospace,monospace;margin-bottom:16px}
-  .readme img{display:block;max-width:100%;margin-bottom:16px}
+  .readme img{max-width:100%;vertical-align:middle}
+  .readme > a > img{display:block;margin-bottom:16px}
+  .readme p{margin:0 0 16px}
+  .readme summary{cursor:pointer;margin-bottom:8px}
+  .readme samp{font:12px ui-monospace,monospace}
 </style></head>
 <body>
   <header><b>tam11a / README.md preview</b>
@@ -26,7 +27,7 @@ export function previewHtml(sections: { file: string; href: string; alt: string 
   </header>
   <main><div class="box" id="box"><div class="path"><b>tam11a</b> / README.md</div>
     <div class="readme">
-      ${imgs}
+${readme}
     </div></div></main>
 <script>
   const box = document.getElementById('box');
