@@ -6,7 +6,6 @@ import { about } from './sections/about.ts';
 import { activity } from './sections/activity.ts';
 import { contactButton, contactCard } from './sections/contact.ts';
 import { egg } from './sections/egg.ts';
-import { hero } from './sections/hero.ts';
 import { honorsCard } from './sections/honors.ts';
 import { live } from './sections/live.ts';
 import { proficienciesCard } from './sections/proficiencies.ts';
@@ -29,7 +28,6 @@ type Block = { img: Img } | { row: Img[]; width: string } | { details: string; i
 
 const gh = 'https://github.com/tam11a';
 const layout: Block[] = [
-  { img: { file: 'hero.svg', render: () => hero(data), href: site, alt: 'tam. — Ibrahim Sadik Tamim, Creative Software Engineer based in Dhaka' } },
   { img: { file: 'about.svg', render: () => about(data), href: site, alt: 'About — Senior Software Engineer in Dhaka, Bangladesh. 4+ years. Open to work.' } },
   { img: { file: 'proficiencies.svg', render: proficienciesCard, href: site, alt: 'Proficiencies — skills, tech stack, tools and languages' } },
   { img: { file: 'work.svg', render: workCard, href: `${site}/experience`, alt: 'Work — Defined Solution, Cuebites Digital, Reserveit, Planet X' } },

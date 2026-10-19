@@ -7,7 +7,6 @@ import { canvas, color } from '../tokens.ts';
 
 const W = canvas.width;
 const P = canvas.pad;
-const COL = 400; // content column, mirrors the portfolio's label | content split
 
 /** Circular text badge that slowly spins, the classic portfolio "available" stamp. */
 function badge(fonts: FontKit, cx: number, cy: number, r: number) {
@@ -43,35 +42,46 @@ export async function about(live: Live) {
   const label = (s: string, x: number, y: number, extra = '') =>
     `<text x="${x}" y="${y}" fill="${color.muted}" style="${fontStyle('mono', 12, 'letter-spacing:1.4px')}" ${extra}>${esc(fonts.use('mono', s.toUpperCase()))}</text>`;
 
-  // Facts grid: 2 × 2, same labels and order as the portfolio.
-  const colW = (W - P - COL) / 2;
+  // Facts: one full-width row, columns sized to their content with even gaps between.
+  const factSize = 15;
+  const widths = facts.map((f) =>
+    Math.max(
+      measure('mono', f.label.toUpperCase(), 12, 1.4),
+      measure('mono', f.value.toUpperCase(), factSize, 1.2) + ('status' in f && f.status ? 18 : 0),
+    ),
+  );
+  const factGap = (W - 2 * P - widths.reduce((a, b) => a + b, 0)) / (facts.length - 1);
+  let fx = P;
   const factEls = facts
     .map((f, i) => {
-      const x = COL + (i % 2) * colW;
-      const y = 72 + Math.floor(i / 2) * 76;
+      const x = fx;
+      fx += widths[i] + factGap;
+      const y = 64;
       const val = fonts.use('mono', f.value.toUpperCase());
       const status = 'status' in f && f.status;
       const valueEl = status
         ? `<circle cx="${x + 5}" cy="${y + 25}" r="4" fill="${color.accent}"/>
            <circle class="ping" cx="${x + 5}" cy="${y + 25}" r="4" fill="none" stroke="${color.accent}" stroke-width="1.4"/>
-           <text x="${x + 18}" y="${y + 30}" fill="${color.accent}" style="${fontStyle('mono', 15, 'letter-spacing:1.2px')}">${esc(val)}</text>`
-        : `<text x="${x}" y="${y + 30}" fill="${color.fg}" style="${fontStyle('mono', 15, 'letter-spacing:1.2px')}">${esc(val)}</text>`;
-      return `<g class="reveal" style="animation-delay:${(0.15 + i * 0.1).toFixed(2)}s">${label(f.label, x, y)}${valueEl}</g>`;
+           <text x="${x + 18}" y="${y + 30}" fill="${color.accent}" style="${fontStyle('mono', factSize, 'letter-spacing:1.2px')}">${esc(val)}</text>`
+        : `<text x="${x.toFixed(1)}" y="${y + 30}" fill="${color.fg}" style="${fontStyle('mono', factSize, 'letter-spacing:1.2px')}">${esc(val)}</text>`;
+      return `<g class="reveal" style="animation-delay:${(0.1 + i * 0.1).toFixed(2)}s">${label(f.label, Number(x.toFixed(1)), y)}${valueEl}</g>`;
     })
     .join('');
 
   const bioSize = 19;
-  const bioLines = wrap('body', fonts.use('body', bio), bioSize, W - P - COL);
-  const bioTop = 260;
+  const bioLines = wrap('body', fonts.use('body', bio), bioSize, W - 2 * P);
+  const bioTop = 180;
   const bioEl = bioLines
-    .map((l, i) => `<tspan x="${COL}" y="${bioTop + i * 31}">${esc(l)}</tspan>`)
+    .map((l, i) => `<tspan x="${P}" y="${bioTop + i * 31}">${esc(l)}</tspan>`)
     .join('');
   const bioEnd = bioTop + (bioLines.length - 1) * 31;
 
-  // Stats strip
+  // Stats strip, with the spinning badge as a fourth item on the right.
   const ruleY = bioEnd + 46;
   const numY = ruleY + 92;
-  const statW = (W - 2 * P) / stats.length;
+  const badgeR = 52;
+  const badgeSpace = 2 * (badgeR + 16) + 24;
+  const statW = (W - 2 * P - badgeSpace) / stats.length;
   const statDefs: string[] = [];
   const statEls = stats
     .map((s, i) => {
@@ -92,27 +102,21 @@ export async function about(live: Live) {
     .join('');
 
   const H = numY + 80;
-
-  const ring = badge(fonts, P + 86, bioTop + 4, 70);
-  const heading = fonts.use('bodyBold', 'About');
-  const headingW = measure('bodyBold', heading, 44);
-  fonts.use('bodyBold', '.');
+  const ring = badge(fonts, W - P - badgeR - 16, (ruleY + H) / 2, badgeR);
 
   const body = `
+  <g class="glow"><circle cx="150" cy="0" r="420" fill="url(#glowT)"/></g>
   <g class="glow"><circle cx="${W - 40}" cy="${H - 10}" r="360" fill="url(#glowC)"/></g>
 
-  <text class="reveal" x="${P}" y="72" fill="${color.muted}" style="${fontStyle('mono', 14)}">${fonts.use('mono', '# 001')}</text>
-  <text class="reveal" style="animation-delay:.1s;${fontStyle('bodyBold', 44)}" x="${P}" y="128" fill="${color.fg}">${heading}<tspan fill="${color.accent}">.</tspan></text>
-  <rect class="bar" x="${P}" y="148" width="${headingW + 12}" height="2" fill="${color.accent}"/>
-
-  ${ring.body}
   ${factEls}
 
-  <line class="rule" x1="${COL}" x2="${W - P}" y1="${bioTop - 52}" y2="${bioTop - 52}" stroke="${color.line}" style="animation-delay:.5s"/>
-  <text class="reveal" style="animation-delay:.6s;${fontStyle('body', bioSize)}" fill="${color.subtle}">${bioEl}</text>
+  <line class="rule" x1="${P}" x2="${W - P}" y1="${bioTop - 52}" y2="${bioTop - 52}" stroke="${color.line}" style="animation-delay:.4s"/>
+  <text class="reveal" style="animation-delay:.5s;${fontStyle('body', bioSize)}" fill="${color.subtle}">${bioEl}</text>
 
-  <line class="rule" x1="${P}" x2="${W - P}" y1="${ruleY}" y2="${ruleY}" stroke="${color.line}" style="animation-delay:.8s"/>
-  ${statEls}`;
+  <line class="rule" x1="${P}" x2="${W - P}" y1="${ruleY}" y2="${ruleY}" stroke="${color.line}" style="animation-delay:.7s"/>
+  ${statEls}
+  <line x1="${W - P - badgeSpace + 8}" x2="${W - P - badgeSpace + 8}" y1="${ruleY + 28}" y2="${numY + 44}" stroke="${color.line}"/>
+  ${ring.body}`;
 
   const css = `
   .glow{transform-origin:center;animation:breathe 9s ease-in-out infinite alternate}
@@ -121,7 +125,6 @@ export async function about(live: Live) {
   @keyframes ping{from{transform:scale(1);opacity:.9}to{transform:scale(3.2);opacity:0}}
   .rule{transform-origin:left;animation:draw 1.2s var(--ease) both}
   @keyframes draw{from{transform:scaleX(0)}}
-  .bar{transform-origin:left;animation:draw .9s var(--ease) .35s both}
   ${odometerCss}
   .spin{animation:spin 24s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -129,6 +132,7 @@ export async function about(live: Live) {
   @keyframes nudge{0%,55%,100%{transform:none}25%{transform:translate(4px,-4px)}}`;
 
   const defs = `
+  <radialGradient id="glowT"><stop offset="0" stop-color="${color.accent}" stop-opacity=".4"/><stop offset=".5" stop-color="${color.accent}" stop-opacity=".08"/><stop offset="1" stop-color="${color.accent}" stop-opacity="0"/></radialGradient>
   <radialGradient id="glowC"><stop offset="0" stop-color="${color.accent}" stop-opacity=".22"/><stop offset="1" stop-color="${color.accent}" stop-opacity="0"/></radialGradient>
   ${ring.defs}
   ${statDefs.join('')}`;

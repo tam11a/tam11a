@@ -3,15 +3,6 @@ export const profile = {
   handle: 'tam11a',
   name: 'Ibrahim Sadik Tamim',
   wordmark: 'tam',
-  tagline: 'Creative Software Engineer based in Dhaka.',
-  timezone: 'Asia/Dhaka',
-  rotator: [
-    'Senior Software Engineer',
-    'Software Engineer @ Cuebites',
-    'Ex Co-Founder @ Defined Solution',
-    'NASA Space Apps National Champion',
-    'Lazy Engineer × Noob Gamer',
-  ],
   about: {
     facts: [
       { label: 'Role', value: 'Senior Software Engineer' },
