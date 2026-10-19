@@ -4,30 +4,11 @@
 
 <a href="https://tam11a.dev"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/proficiencies.svg" alt="Proficiencies — skills, tech stack, tools and languages" width="100%"></a>
 
-<a href="https://tam11a.dev/experience"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/work.svg" alt="Work — Defined Solution, Cuebites Digital, Reserveit, Planet X" width="100%"></a>
+<a href="https://tam11a.dev/experience"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/work.svg" alt="Work — Cuebites Digital, Defined Solution, Reserveit, Planet X" width="100%"></a>
 
 <a href="https://tam11a.dev/honors"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/honors.svg" alt="Honors — CSE Fest 2K24 Hackathon champion, NASA Space Apps national champion 2020" width="100%"></a>
 
-<a href="https://tam11a.dev/projects"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/projects.svg" alt="Projects" width="100%"></a>
-
-<p>
-<a href="https://tam11a.dev/projects/munchies-bangladesh"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/project-1.svg" alt="Munchies Bangladesh — Late-night food delivery platform — because cravings don't follow a schedule." width="49%"></a>
-<a href="https://tam11a.dev/projects/sultans-dine"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/project-2.svg" alt="Sultan's Dine — UI/UX case study reimagining the digital dining experience for a premium restaurant brand." width="49%"></a>
-</p>
-
-<p>
-<a href="https://tam11a.dev/projects/grade-limited"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/project-3.svg" alt="Grade Bangladesh — B2B e-commerce platform helping businesses save big on everyday employee essentials." width="49%"></a>
-<a href="https://tam11a.dev/projects/rayos-bangladesh"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/project-4.svg" alt="Rayos Bangladesh — Medical equipment marketplace making healthcare tech accessible to everyday consumers." width="49%"></a>
-</p>
-
-<p>
-<a href="https://tam11a.dev/projects/pnd-service"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/project-5.svg" alt="PND Service Bangladesh — B2B wholesale platform empowering Facebook marketplace sellers to scale with zero upfront cost." width="49%"></a>
-<a href="https://tam11a.dev/projects/fascino"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/project-6.svg" alt="Fascino POS System — Multi-channel POS software for Fascino, one of the finest fashion houses in Bangladesh, streamlining sales, inventory, and customer management." width="49%"></a>
-</p>
-
 <a href="https://github.com/tam11a"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/live.svg" alt="Live GitHub stats: contributions, streaks, stars, contribution snake and top languages" width="100%"></a>
-
-<a href="https://github.com/tam11a?tab=repositories"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/activity.svg" alt="Recently active public repositories" width="100%"></a>
 
 <a href="mailto:ibrahimsadiktamim@gmail.com"><img src="https://raw.githubusercontent.com/tam11a/tam11a/output/contact.svg" alt="Contact — ibrahimsadiktamim@gmail.com" width="100%"></a>
 

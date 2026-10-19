@@ -27,23 +27,31 @@ interface Img { file: string; render: () => Promise<string>; href: string; alt: 
 type Block = { img: Img } | { row: Img[]; width: string } | { details: string; img: Img };
 
 const gh = 'https://github.com/tam11a';
+// Sections parked for now; flip to true to bring them back.
+const SHOW = { projects: false, activity: false };
 const layout: Block[] = [
   { img: { file: 'about.svg', render: () => about(data), href: site, alt: 'About — Senior Software Engineer in Dhaka, Bangladesh. 4+ years. Open to work.' } },
   { img: { file: 'proficiencies.svg', render: proficienciesCard, href: site, alt: 'Proficiencies — skills, tech stack, tools and languages' } },
-  { img: { file: 'work.svg', render: workCard, href: `${site}/experience`, alt: 'Work — Defined Solution, Cuebites Digital, Reserveit, Planet X' } },
+  { img: { file: 'work.svg', render: workCard, href: `${site}/experience`, alt: 'Work — Cuebites Digital, Defined Solution, Reserveit, Planet X' } },
   { img: { file: 'honors.svg', render: honorsCard, href: `${site}/honors`, alt: 'Honors — CSE Fest 2K24 Hackathon champion, NASA Space Apps national champion 2020' } },
-  { img: { file: 'projects.svg', render: projectsHeader, href: `${site}/projects`, alt: 'Projects' } },
-  ...[0, 2, 4].map((k) => ({
-    width: '49%',
-    row: [k, k + 1].map((i) => ({
-      file: `project-${i + 1}.svg`,
-      render: () => projectCard(i),
-      href: `${site}/projects/${projects[i].slug}`,
-      alt: `${projects[i].name} — ${projects[i].summary}`,
-    })),
-  })),
+  ...(SHOW.projects
+    ? [
+      { img: { file: 'projects.svg', render: projectsHeader, href: `${site}/projects`, alt: 'Projects' } },
+      ...[0, 2, 4].map((k) => ({
+        width: '49%',
+        row: [k, k + 1].map((i) => ({
+          file: `project-${i + 1}.svg`,
+          render: () => projectCard(i),
+          href: `${site}/projects/${projects[i].slug}`,
+          alt: `${projects[i].name} — ${projects[i].summary}`,
+        })),
+      })),
+      ]
+    : []),
   { img: { file: 'live.svg', render: () => live(data, snake), href: gh, alt: 'Live GitHub stats: contributions, streaks, stars, contribution snake and top languages' } },
-  { img: { file: 'activity.svg', render: () => activity(data), href: `${gh}?tab=repositories`, alt: 'Recently active public repositories' } },
+  ...(SHOW.activity
+    ? [{ img: { file: 'activity.svg', render: () => activity(data), href: `${gh}?tab=repositories`, alt: 'Recently active public repositories' } }]
+    : []),
   { img: { file: 'contact.svg', render: () => contactCard(), href: contact.links[0].href, alt: `Contact — ${contact.email}` } },
   {
     width: '19%',

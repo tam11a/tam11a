@@ -11,20 +11,13 @@ const COL = 400;
 /** Closing card: big call to action, email, and the tam. sign-off. */
 export async function contactCard(year = new Date().getFullYear()) {
   const fonts = new FontKit();
-  const lineA = fonts.use('bodyBold', "Let's build");
-  const lineB = fonts.use('bodyBold', 'something great');
-  fonts.use('bodyBold', '.');
   const email = fonts.use('mono', contact.email.toUpperCase());
   const emailW = measure('mono', email, 15, 1.4);
   const footY = 360;
 
   const body = `
   <g class="glow"><circle cx="${W - 120}" cy="40" r="440" fill="url(#glowK)"/></g>
-  ${header(fonts, '# 007', 'Contact')}
-  <g class="reveal" style="animation-delay:.2s;${fontStyle('bodyBold', 52)}" fill="${color.fg}">
-    <text x="${COL}" y="104">${esc(lineA)}</text>
-    <text x="${COL}" y="164">${esc(lineB)}<tspan fill="${color.accent}">.</tspan></text>
-  </g>
+  ${header(fonts, '# 007', "Let's build something great")}
   <g class="reveal" style="animation-delay:.4s">
     ${mono(fonts, 'Mail', COL, 222)}
     <text x="${COL}" y="252" fill="${color.fg}" style="${fontStyle('mono', 15, 'letter-spacing:1.4px')}">${esc(email)}</text>
