@@ -5,17 +5,19 @@ import { canvas, color } from '../tokens.ts';
 
 const W = canvas.width;
 const P = canvas.pad;
-const COL = 400;
-const RAIL = COL - 44;
+const COL = 400; // header intro column, same split as the other cards
+const RAIL = P + 8; // timeline runs full width under the header
+const X = RAIL + 36; // entry content
+const TOP = 206; // header divider
 
 /** Vertical timeline: the rail draws down and each node lights up as it's reached. */
 export async function workCard() {
   const fonts = new FontKit();
-  const intro = wrap('body', fonts.use('body', work.intro), 18, 250)
-    .map((l, i) => `<tspan x="${P}" y="${200 + i * 28}">${esc(l)}</tspan>`)
+  const intro = wrap('body', fonts.use('body', work.intro), 19, W - P - COL)
+    .map((l, i) => `<tspan x="${COL}" y="${100 + i * 30}">${esc(l)}</tspan>`)
     .join('');
 
-  let y = 92;
+  let y = TOP + 74;
   const nodes: number[] = [];
   const entries = work.roles
     .map((r, i) => {
@@ -24,10 +26,10 @@ export async function workCard() {
       const delay = 0.35 + i * 0.28;
       const company = fonts.use('bodyBold', r.company);
       const cw = measure('bodyBold', company, 24);
-      const country = mono(fonts, r.country, COL + cw + 10, y0, { size: 11 });
+      const country = mono(fonts, r.country, X + cw + 10, y0, { size: 11 });
       const current = r.current
         ? (() => {
-            const x = COL + cw + 10 + measure('mono', r.country, 11, 1.4) + 14;
+            const x = X + cw + 10 + measure('mono', r.country, 11, 1.4) + 14;
             const t = 'Current';
             const w = measure('mono', t.toUpperCase(), 10, 1.2) + 30;
             return `<rect x="${x}" y="${y0 - 16}" width="${w}" height="20" rx="10" fill="${color.accent}" fill-opacity=".12" stroke="${color.accent}" stroke-opacity=".5"/>
@@ -35,18 +37,18 @@ export async function workCard() {
               ${mono(fonts, t, x + 19, y0 - 2, { size: 10, fill: color.accent, tracking: 1.2 })}`;
           })()
         : '';
-      const lines = wrap('body', fonts.use('body', r.summary), 16, W - P - COL);
+      const lines = wrap('body', fonts.use('body', r.summary), 16, W - P - X);
       const summary = lines
-        .map((l, k) => `<tspan x="${COL}" y="${y0 + 58 + k * 25}">${esc(l)}</tspan>`)
+        .map((l, k) => `<tspan x="${X}" y="${y0 + 58 + k * 25}">${esc(l)}</tspan>`)
         .join('');
       const tagY = y0 + 58 + (lines.length - 1) * 25 + 20;
-      const tags = pills(fonts, r.tags, COL, tagY, W - P);
+      const tags = pills(fonts, r.tags, X, tagY, W - P);
       y = tagY + 24 + 46;
       return `<g class="reveal" style="animation-delay:${delay.toFixed(2)}s">
-        <text x="${COL}" y="${y0}" fill="${color.fg}" style="${fontStyle('bodyBold', 24)}">${esc(company)}</text>
+        <text x="${X}" y="${y0}" fill="${color.fg}" style="${fontStyle('bodyBold', 24)}">${esc(company)}</text>
         ${country}${current}
         ${mono(fonts, r.period, W - P, y0, { anchor: 'end' })}
-        ${mono(fonts, `${r.title} / ${r.type}`, COL, y0 + 26, { fill: color.accent, size: 12, tracking: 1.2 })}
+        ${mono(fonts, `${r.title} / ${r.type}`, X, y0 + 26, { fill: color.accent, size: 12, tracking: 1.2 })}
         <text fill="${color.subtle}" style="${fontStyle('body', 16)}">${summary}</text>
         ${tags.body}
       </g>`;
@@ -69,14 +71,15 @@ export async function workCard() {
     .join('');
 
   const body = `
-  <g class="glow"><circle cx="0" cy="${H}" r="420" fill="url(#glowW)"/></g>
+  <g class="glow"><circle cx="${W}" cy="${H}" r="420" fill="url(#glowW)"/></g>
   ${header(fonts, '# 003', 'Work')}
   <text class="reveal" style="animation-delay:.2s;${fontStyle('body', 18)}" fill="${color.subtle}">${intro}</text>
   <g class="reveal" style="animation-delay:.3s">
-    ${mono(fonts, `${work.roles.length} roles · since 2021`, P, 290)}
-    ${mono(fonts, 'View all experience', P, 318, { fill: color.fg })}
-    ${arrow(P + measure('mono', 'VIEW ALL EXPERIENCE', 12, 1.4) + 8, 308, 9)}
+    ${mono(fonts, `${work.roles.length} roles · since 2021`, COL, 166)}
+    ${mono(fonts, 'View all experience', W - P - 22, 166, { anchor: 'end', fill: color.fg })}
+    ${arrow(W - P - 12, 156, 9)}
   </g>
+  <line class="rule" x1="${P}" x2="${W - P}" y1="${TOP}" y2="${TOP}" stroke="${color.line}" style="animation-delay:.3s"/>
 
   <line x1="${RAIL}" x2="${RAIL}" y1="${railTop}" y2="${railBot}" stroke="${color.line}" stroke-width="1.5"/>
   <line class="railfill" x1="${RAIL}" x2="${RAIL}" y1="${railTop}" y2="${railBot}" stroke="url(#railG)" stroke-width="1.5"/>
