@@ -2,15 +2,14 @@ import { profile } from '../data.ts';
 import { FontKit, measure, wrap } from '../lib/fonts.ts';
 import type { Live } from '../lib/github.ts';
 import { odometer, odometerCss } from '../lib/odometer.ts';
-import { card, esc, fontStyle } from '../lib/svg.ts';
-import { canvas, color } from '../tokens.ts';
+import { card, esc, fontStyle, mono, para } from '../lib/svg.ts';
+import { canvas, color, mobile } from '../tokens.ts';
 
 const W = canvas.width;
 const P = canvas.pad;
 
 /** Circular text badge that slowly spins, the classic portfolio "available" stamp. */
-function badge(fonts: FontKit, cx: number, cy: number, r: number) {
-  const size = 11;
+function badge(fonts: FontKit, cx: number, cy: number, r: number, size = 11) {
   const phrase = fonts.use('mono', 'OPEN TO WORK — BASED IN DHAKA — ');
   // Spread the glyphs so the phrase closes the circle exactly.
   const tracking = (2 * Math.PI * r - measure('mono', phrase, size)) / [...phrase].length;
@@ -142,6 +141,96 @@ export async function about(live: Live) {
     title: 'About — tam11a',
     desc: `${facts.map((f) => `${f.label}: ${f.value}`).join('. ')}. ${bio} ${stats.map((s) => `${s.value}${s.suffix ?? ''} ${s.label}`).join(', ')}.`,
     defs,
+    css,
+    body,
+    fonts,
+  });
+}
+
+/** Phone layout: facts stacked in rows, bio, then a 2 × 2 of stats with the badge as the fourth cell. */
+export async function aboutMobile(live: Live) {
+  const fonts = new FontKit();
+  const MW = mobile.width;
+  const MP = mobile.pad;
+  const { facts, bio } = profile.about;
+  const stats = profile.about.stats.map((s) => ({ ...s, value: s.live ? live[s.live].toLocaleString('en-US') : s.value! }));
+
+  // Role gets its own row (it's the longest); the rest pair up.
+  const slots = [
+    [0, MP, 44],
+    [1, MP, 112],
+    [2, MP + 216, 112],
+    [3, MP, 180],
+  ] as const;
+  const factEls = slots
+    .map(([i, x, y], k) => {
+      const f = facts[i];
+      const status = 'status' in f && f.status;
+      const val = f.value.toUpperCase();
+      const value = status
+        ? `<circle cx="${x + 5}" cy="${y + 23}" r="4" fill="${color.accent}"/><circle class="ping" cx="${x + 5}" cy="${y + 23}" r="4" fill="none" stroke="${color.accent}" stroke-width="1.4"/>
+           ${mono(fonts, val, x + 18, y + 28, { size: 15, fill: color.accent, tracking: 1.2 })}`
+        : mono(fonts, val, x, y + 28, { size: 15, fill: color.fg, tracking: 1.2 });
+      return `<g class="reveal" style="animation-delay:${(0.1 + k * 0.08).toFixed(2)}s">${mono(fonts, f.label, x, y, { size: mobile.min })}${value}</g>`;
+    })
+    .join('');
+
+  const rule1 = 236;
+  const b = para(fonts, bio, MP, rule1 + 44, MW - 2 * MP, 16, 25, color.subtle, 0.4);
+  const rule2 = b.last + 38;
+
+  // Left column a bit wider so "Contributions / yr" clears the divider.
+  const colX = [MP, MP + 200];
+  const rowY = [rule2 + 70, rule2 + 178];
+  const statDefs: string[] = [];
+  const statEls = stats
+    .map((st, i) => {
+      const x = colX[i % 2];
+      const y = rowY[Math.floor(i / 2)];
+      const o = odometer(fonts, st.value, x, y, 46, 0.6 + i * 0.12, `m${i}`);
+      statDefs.push(o.defs);
+      const suffix = st.suffix
+        ? `<text x="${(x + o.width + 2).toFixed(1)}" y="${y}" fill="${color.accent}" style="${fontStyle('display', 46)}">${esc(fonts.use('display', st.suffix))}</text>`
+        : '';
+      return `<g>${o.body}${suffix}</g><g class="reveal" style="animation-delay:${(0.9 + i * 0.15).toFixed(2)}s">${mono(fonts, st.label, x, y + 30, { size: mobile.min })}</g>`;
+    })
+    .join('');
+  const ring = badge(fonts, (colX[1] + MW - MP) / 2 - 6, rowY[1] + 2, 36, 10);
+  const H = rowY[1] + 76;
+
+  const body = `
+  <g class="glow"><circle cx="40" cy="0" r="300" fill="url(#glowT)"/></g>
+  <g class="glow"><circle cx="${MW}" cy="${H}" r="260" fill="url(#glowC)"/></g>
+  ${factEls}
+  <line class="rule" x1="${MP}" x2="${MW - MP}" y1="${rule1}" y2="${rule1}" stroke="${color.line}" style="animation-delay:.35s"/>
+  ${b.body}
+  <line class="rule" x1="${MP}" x2="${MW - MP}" y1="${rule2}" y2="${rule2}" stroke="${color.line}" style="animation-delay:.6s"/>
+  <line x1="${colX[1] - 16}" x2="${colX[1] - 16}" y1="${rule2 + 24}" y2="${H - 24}" stroke="${color.line}"/>
+  <line x1="${MP}" x2="${MW - MP}" y1="${rowY[0] + 50}" y2="${rowY[0] + 50}" stroke="${color.line}"/>
+  ${statEls}
+  ${ring.body}`;
+
+  const css = `
+  .glow{transform-origin:center;animation:breathe 9s ease-in-out infinite alternate}
+  @keyframes breathe{from{opacity:.6;transform:scale(.92)}to{opacity:1;transform:scale(1.06)}}
+  .ping{transform-origin:center;animation:ping 2s cubic-bezier(0,0,.2,1) infinite}
+  @keyframes ping{from{transform:scale(1);opacity:.9}to{transform:scale(3.2);opacity:0}}
+  .rule{transform-origin:left;animation:draw 1.2s var(--ease) both}
+  @keyframes draw{from{transform:scaleX(0)}}
+  ${odometerCss}
+  .spin{animation:spin 24s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .sway{animation:nudge 3s cubic-bezier(.16,1,.3,1) 1.5s infinite}
+  @keyframes nudge{0%,55%,100%{transform:none}25%{transform:translate(4px,-4px)}}`;
+
+  return card({
+    width: MW,
+    height: H,
+    title: 'About — tam11a',
+    desc: `${facts.map((f) => `${f.label}: ${f.value}`).join('. ')}. ${bio}`,
+    defs: `<radialGradient id="glowT"><stop offset="0" stop-color="${color.accent}" stop-opacity=".4"/><stop offset="1" stop-color="${color.accent}" stop-opacity="0"/></radialGradient>
+      <radialGradient id="glowC"><stop offset="0" stop-color="${color.accent}" stop-opacity=".22"/><stop offset="1" stop-color="${color.accent}" stop-opacity="0"/></radialGradient>
+      ${ring.defs}${statDefs.join('')}`,
     css,
     body,
     fonts,

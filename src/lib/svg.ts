@@ -1,6 +1,8 @@
-import { canvas, color, font, type FontKey } from '../tokens.ts';
-import { measure } from './fonts.ts';
+import { canvas, color, font, mobile, type FontKey } from '../tokens.ts';
+import { measure, wrap } from './fonts.ts';
 import type { FontKit } from './fonts.ts';
+
+const wrapText = (fonts: FontKit, text: string, size: number, width: number) => wrap('body', fonts.use('body', text), size, width);
 
 export const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -98,19 +100,53 @@ export function header(fonts: FontKit, num: string, title: string, x = canvas.pa
   <rect class="bar" x="${x}" y="148" width="${(w + 12).toFixed(1)}" height="2" fill="${color.accent}"/>`;
 }
 
-/** Outlined tag pills laid out left to right; returns markup and the row's end x. */
-export function pills(fonts: FontKit, tags: string[], x: number, y: number, maxX = Infinity) {
+/** Outlined tag pills laid out left to right, wrapping onto new rows past `maxX`. */
+export function pills(fonts: FontKit, tags: string[], x: number, y: number, maxX = Infinity, size = 11) {
   let cx = x;
+  let cy = y;
   const out: string[] = [];
   for (const tag of tags) {
     const t = fonts.use('mono', tag.toUpperCase());
-    const w = measure('mono', t, 11, 1) + 20;
-    if (cx + w > maxX) break;
-    out.push(`<rect x="${cx.toFixed(1)}" y="${y}" width="${w.toFixed(1)}" height="24" rx="12" fill="none" stroke="${color.line}"/>
-      <text x="${(cx + 10).toFixed(1)}" y="${y + 16}" fill="${color.subtle}" style="${fontStyle('mono', 11, 'letter-spacing:1px')}">${esc(t)}</text>`);
+    const w = measure('mono', t, size, 1) + 20;
+    if (cx > x && cx + w > maxX) (cx = x), (cy += 32);
+    out.push(`<rect x="${cx.toFixed(1)}" y="${cy}" width="${w.toFixed(1)}" height="24" rx="12" fill="none" stroke="${color.line}"/>
+      <text x="${(cx + 10).toFixed(1)}" y="${cy + 12 + size * 0.36}" fill="${color.subtle}" style="${fontStyle('mono', size, 'letter-spacing:1px')}">${esc(t)}</text>`);
     cx += w + 8;
   }
-  return { body: out.join(''), end: cx };
+  return { body: out.join(''), end: cx, bottom: cy + 24 };
+}
+
+/** Phone header: label, then a heading that may run over several lines, then the accent bar. */
+export function headerM(fonts: FontKit, num: string, lines: string[], x = mobile.pad, size = 34) {
+  fonts.use('bodyBold', '.');
+  const lh = size * 1.18;
+  const heading = lines
+    .map((l, i) => {
+      const t = fonts.use('bodyBold', l);
+      const dot = i === lines.length - 1 ? `<tspan fill="${color.accent}">.</tspan>` : '';
+      return `<text x="${x}" y="${(84 + i * lh).toFixed(1)}">${esc(t)}${dot}</text>`;
+    })
+    .join('');
+  const last = lines.at(-1)!;
+  const barY = 84 + (lines.length - 1) * lh + 18;
+  return {
+    bottom: barY + 2,
+    body: `
+  <text class="reveal" x="${x}" y="44" fill="${color.muted}" style="${fontStyle('mono', mobile.min)}">${esc(fonts.use('mono', num))}</text>
+  <g class="reveal" style="animation-delay:.1s;${fontStyle('bodyBold', size)}" fill="${color.fg}">${heading}</g>
+  <rect class="bar" x="${x}" y="${barY.toFixed(1)}" width="${(measure('bodyBold', last + '.', size) + 10).toFixed(1)}" height="2" fill="${color.accent}"/>`,
+  };
+}
+
+/** Body copy wrapped to a width, as one <text> of tspans; returns markup and last baseline. */
+export function para(fonts: FontKit, text: string, x: number, y: number, width: number, size = 16, lh = size * 1.55, fill: string = color.subtle, delay = 0.2) {
+  const lines = wrapText(fonts, text, size, width);
+  return {
+    body: `<text class="reveal" style="animation-delay:${delay}s;${fontStyle('body', size)}" fill="${fill}">${lines
+      .map((l, i) => `<tspan x="${x}" y="${(y + i * lh).toFixed(1)}">${esc(l)}</tspan>`)
+      .join('')}</text>`,
+    last: y + (lines.length - 1) * lh,
+  };
 }
 
 /** ↗ arrow, the portfolio's link affordance. */

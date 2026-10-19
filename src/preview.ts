@@ -11,10 +11,10 @@ export function previewHtml(readme: string) {
   button[aria-pressed=true]{border-color:#F53F06;color:#F53F06}
   main{display:flex;justify-content:center;padding:32px 16px}
   .box{width:100%;max-width:806px;border:1px solid #30363d;border-radius:6px;padding:24px;box-sizing:border-box;transition:max-width .3s}
-  .box.mobile{max-width:380px;padding:16px}
+  .box.mobile{max-width:362px;padding:16px}
   .path{font:12px ui-monospace,monospace;margin-bottom:16px}
   .readme img{max-width:100%;vertical-align:middle}
-  .readme > a > img{display:block;margin-bottom:16px}
+  .readme > a > img, .readme > a > picture > img{display:block;margin-bottom:16px}
   .readme p{margin:0 0 16px}
   .readme summary{cursor:pointer;margin-bottom:8px}
   .readme samp{font:12px ui-monospace,monospace}
@@ -31,7 +31,13 @@ ${readme}
     </div></div></main>
 <script>
   const box = document.getElementById('box');
-  const set = (m) => { box.classList.toggle('mobile', m); desk.setAttribute('aria-pressed', !m); mob.setAttribute('aria-pressed', m); };
+  // <source media> follows the real viewport, so in a wide window swap the phone images in by hand.
+  const swap = (m) => document.querySelectorAll('.readme picture').forEach((p) => {
+    const img = p.querySelector('img');
+    img.dataset.desk ??= img.src;
+    img.src = m ? p.querySelector('source').srcset : img.dataset.desk;
+  });
+  const set = (m) => { box.classList.toggle('mobile', m); desk.setAttribute('aria-pressed', !m); mob.setAttribute('aria-pressed', m); swap(m); };
   desk.onclick = () => set(false); mob.onclick = () => set(true);
   replay.onclick = () => document.querySelectorAll('.readme img').forEach((i) => i.src = i.src.split('?')[0] + '?t=' + Date.now());
 </script>

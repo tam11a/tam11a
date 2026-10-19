@@ -21,6 +21,10 @@ export type FontKey = keyof typeof font;
 // Every card shares the README content width so sections line up edge to edge.
 export const canvas = { width: 1000, radius: 16, pad: 56 } as const;
 
+// Phone variants: ~330px README column, so a 400px canvas renders at ~80% and
+// nothing below 13px stays legible.
+export const mobile = { width: 400, pad: 24, min: 13 } as const;
+
 export const ease = {
   out: 'cubic-bezier(.16,1,.3,1)',
   inOut: 'cubic-bezier(.65,0,.35,1)',

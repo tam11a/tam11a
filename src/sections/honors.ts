@@ -1,7 +1,7 @@
 import { honors } from '../data.ts';
 import { FontKit, wrap } from '../lib/fonts.ts';
-import { card, esc, fontStyle, header, mono, sharedCss } from '../lib/svg.ts';
-import { canvas, color } from '../tokens.ts';
+import { card, esc, fontStyle, header, headerM, mono, para, sharedCss } from '../lib/svg.ts';
+import { canvas, color, mobile } from '../tokens.ts';
 
 const W = canvas.width;
 const P = canvas.pad;
@@ -77,6 +77,64 @@ export async function honorsCard() {
       ${defs.join('')}`,
     css,
     body,
+    fonts,
+  });
+}
+
+/** Phone layout: stacked header, trophy cards one under the other. */
+export async function honorsMobile() {
+  const fonts = new FontKit();
+  const MW = mobile.width;
+  const MP = mobile.pad;
+  const h = headerM(fonts, '# 004', ['Honors']);
+  const p = para(fonts, 'Awards and recognitions earned through competitions and challenges.', MP, h.bottom + 40, MW - 2 * MP, 16, 25);
+
+  const cw = MW - 2 * MP;
+  const ch = 196;
+  let top = p.last + 36;
+  const defs: string[] = [];
+  const cards = honors
+    .map((hn, i) => {
+      const x = MP;
+      const y = top;
+      top += ch + 16;
+      defs.push(`<clipPath id="hc${i}"><rect x="${x}" y="${y}" width="${cw}" height="${ch}" rx="14"/></clipPath>`);
+      const badge = fonts.use('mono', hn.badge.toUpperCase());
+      const detail = para(fonts, hn.detail, x + 22, y + 170, cw - 44, 14.5, 21, color.subtle, 0);
+      return `<g class="reveal" style="animation-delay:${(0.3 + i * 0.15).toFixed(2)}s">
+        <g clip-path="url(#hc${i})">
+          <rect x="${x}" y="${y}" width="${cw}" height="${ch}" fill="#0a0a0a"/>
+          <text x="${x + cw + 6}" y="${y + ch + 18}" text-anchor="end" fill="none" stroke="${color.fg}" stroke-opacity=".07" stroke-width="1.5" style="${fontStyle('display', 110)}">${esc(fonts.use('display', hn.year))}</text>
+          <rect class="sheen" style="animation-delay:${(2 + i * 1.6).toFixed(1)}s" x="${x - 140}" y="${y - 40}" width="90" height="${ch + 80}" fill="url(#sheen)" transform="skewX(-18)"/>
+        </g>
+        <rect x="${x + 0.5}" y="${y + 0.5}" width="${cw - 1}" height="${ch - 1}" rx="14" fill="none" stroke="${color.line}"/>
+        ${trophy(x + 22, y + 24)}
+        ${sparkle(x + 78, y + 28, 5, 0.4 + i)}${sparkle(x + 86, y + 52, 3, 1.2 + i)}
+        <rect x="${x + cw - 22 - 100}" y="${y + 24}" width="100" height="26" rx="13" fill="${color.accent}" fill-opacity=".12" stroke="${color.accent}" stroke-opacity=".5"/>
+        <text x="${x + cw - 22 - 50}" y="${y + 41.5}" text-anchor="middle" fill="${color.accent}" style="${fontStyle('mono', 12, 'letter-spacing:1.4px')}">${esc(badge)}</text>
+        ${mono(fonts, hn.year, x + 22, y + 112, { size: mobile.min })}
+        <text x="${x + 22}" y="${y + 142}" fill="${color.fg}" style="${fontStyle('bodyBold', 21)}">${esc(fonts.use('bodyBold', hn.title))}</text>
+        ${detail.body.replace('class="reveal" style="animation-delay:0s;', 'style="')}
+      </g>`;
+    })
+    .join('');
+
+  const H = top + 8;
+  return card({
+    width: MW,
+    height: H,
+    title: 'Honors — tam11a',
+    desc: honors.map((hn) => `${hn.title} ${hn.year}: ${hn.badge}. ${hn.detail}.`).join(' '),
+    defs: `<radialGradient id="glowH"><stop offset="0" stop-color="${color.accent}" stop-opacity=".14"/><stop offset="1" stop-color="${color.accent}" stop-opacity="0"/></radialGradient>
+      <linearGradient id="sheen"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".09"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      ${defs.join('')}`,
+    css: `${sharedCss}
+  .sheen{animation:sheen 4.8s cubic-bezier(.65,0,.35,1) infinite both}
+  @keyframes sheen{0%{transform:skewX(-18deg) translateX(0)}45%,100%{transform:skewX(-18deg) translateX(${cw + 260}px)}}
+  .twinkle{animation:twinkle 2.6s ease-in-out infinite}
+  @keyframes twinkle{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(.3);opacity:.2}}
+  @media (prefers-reduced-motion:reduce){.sheen{display:none}}`,
+    body: `<g class="glow"><circle cx="${MW / 2}" cy="${H / 2}" r="320" fill="url(#glowH)"/></g>${h.body}${p.body}${cards}`,
     fonts,
   });
 }

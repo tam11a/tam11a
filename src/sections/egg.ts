@@ -1,13 +1,9 @@
 import type { Live } from '../lib/github.ts';
 import { FontKit } from '../lib/fonts.ts';
 import { card, mono, pixels } from '../lib/svg.ts';
-import { canvas, color } from '../tokens.ts';
+import { canvas, color, mobile } from '../tokens.ts';
 
-const W = canvas.width;
-const H = 340;
-const GROUND = 268;
 const PX = 5; // one "pixel" in the sprites
-const T = 3.2; // seconds per bug cycle
 
 // tam, in 12 × 16 pixels: hair, glasses, beard, orange hoodie.
 const head = [
@@ -37,7 +33,7 @@ function rng(seed: number) {
   return () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 }
 
-function skyline() {
+function skyline(W: number, GROUND: number) {
   const r = rng(11);
   const out: string[] = [];
   for (let x = 0; x < W; ) {
@@ -55,19 +51,24 @@ function skyline() {
 }
 
 /** Closing pixel level: tam runs through Dhaka, hops bugs, grabs commits. */
-export async function egg(data: Live) {
+export async function egg(data: Live, phone = false) {
   const fonts = new FontKit();
+  const W = phone ? mobile.width : canvas.width;
+  const H = phone ? 300 : 340;
+  const GROUND = H - 72;
+  const T = phone ? 2.6 : 3.2; // seconds per bug cycle
+  const jw = phone ? 0.13 : 0.09; // jump half-width as a fraction of the cycle (wider when the run is shorter)
   const r = rng(3);
-  const stars = Array.from({ length: 40 }, () =>
+  const stars = Array.from({ length: Math.round(W / 25) }, () =>
     `<rect class="star" style="animation-delay:${(r() * 4).toFixed(1)}s" x="${Math.floor(r() * W)}" y="${Math.floor(r() * 150) + 20}" width="3" height="3" fill="${color.fg}" fill-opacity=".7"/>`,
   ).join('');
 
-  const city = skyline();
+  const city = skyline(W, GROUND);
   const ground = Array.from({ length: W / 40 + 2 }, (_, i) =>
     `<rect x="${i * 40}" y="${GROUND}" width="38" height="6" fill="#262626"/><rect x="${i * 40 + 8}" y="${GROUND + 14}" width="14" height="4" fill="#1a1a1a"/>`,
   ).join('');
 
-  const charX = 180;
+  const charX = phone ? 64 : 180;
   const charH = (head.length + legsA.length) * PX;
   const charY = GROUND - charH;
   const bugY = GROUND - bug.length * PX;
@@ -77,10 +78,18 @@ export async function egg(data: Live) {
   const pct = (f: number) => `${(f * 100).toFixed(1)}%`;
   const apex = 100;
 
-  const hud = `
-  ${mono(fonts, '1UP  TAM11A', 40, 44, { fill: color.fg, size: 14, tracking: 2 })}
+  const edge = phone ? mobile.pad : 40;
+  const commits = `COMMITS ${data.contributions.toLocaleString('en-US')}`;
+  // Phones can't fit three HUD items across, so the level name drops to the footer line.
+  const hud = phone
+    ? `
+  ${mono(fonts, '1UP TAM11A', edge, 40, { fill: color.fg, size: 14, tracking: 1.6 })}
+  ${mono(fonts, commits, W - edge, 40, { anchor: 'end', fill: color.accent, size: 14, tracking: 1.6 })}
+  <g class="blink">${mono(fonts, 'LEVEL 1-1 · DHAKA', W / 2, H - 24, { anchor: 'middle', size: 13, tracking: 2 })}</g>`
+    : `
+  ${mono(fonts, '1UP  TAM11A', edge, 44, { fill: color.fg, size: 14, tracking: 2 })}
   ${mono(fonts, 'LEVEL 1-1 · DHAKA', W / 2, 44, { anchor: 'middle', size: 14, tracking: 2 })}
-  ${mono(fonts, `COMMITS ${data.contributions.toLocaleString('en-US')}`, W - 40, 44, { anchor: 'end', fill: color.accent, size: 14, tracking: 2 })}
+  ${mono(fonts, commits, W - edge, 44, { anchor: 'end', fill: color.accent, size: 14, tracking: 2 })}
   <g class="blink">${mono(fonts, 'Thanks for scrolling this far', W / 2, H - 22, { anchor: 'middle', size: 12, tracking: 2 })}</g>`;
 
   const body = `
@@ -117,15 +126,16 @@ export async function egg(data: Live) {
   @keyframes grab{0%{opacity:1}${pct(hit)}{opacity:0}}
   .jump{animation:jump ${T}s infinite}
   @keyframes jump{
-    0%,${pct(hit - 0.09)}{transform:translateY(0);animation-timing-function:cubic-bezier(.2,.7,.4,1)}
+    0%,${pct(hit - jw)}{transform:translateY(0);animation-timing-function:cubic-bezier(.2,.7,.4,1)}
     ${pct(hit)}{transform:translateY(-${apex}px);animation-timing-function:cubic-bezier(.6,0,.8,.3)}
-    ${pct(hit + 0.09)},100%{transform:translateY(0)}}
+    ${pct(hit + jw)},100%{transform:translateY(0)}}
   .plus{opacity:0;animation:plus ${T}s infinite}
   @keyframes plus{0%,${pct(hit)}{opacity:0;transform:translateY(0)}${pct(hit + 0.02)}{opacity:1}${pct(hit + 0.16)},100%{opacity:0;transform:translateY(-24px)}}
   .blink{animation:tw 1.4s steps(2) infinite}
   @media (prefers-reduced-motion:reduce){.plus,.coin{display:none}}`;
 
   return card({
+    width: W,
     height: H,
     title: 'Level 1-1 — tam11a',
     desc: `Pixel-art mini level: tam runs through Dhaka at night, jumping over bugs and collecting commits. ${data.contributions} commits this year.`,
