@@ -37,15 +37,31 @@ function heatmap(days: Live['days'], y: number, x0 = P, width = GRID_W, weeks = 
   };
 }
 
-/** Platane/snk output, isolated inside an <image> so its CSS can't collide with ours. */
-function snakeImage(svg: string, y: number) {
-  const vb = svg.match(/viewBox="([^"]+)"/)?.[1].split(/[\s,]+/).map(Number);
-  const [w, h] = vb ? [vb[2], vb[3]] : [880, 192];
+/**
+ * Platane/snk output inlined into the card. It can't go in an <image>: browsers don't animate
+ * an SVG nested inside an SVG that is itself shown through <img>, which is how GitHub renders
+ * READMEs. Its classes, keyframes and CSS variables get an `sk-` prefix so they can't collide
+ * with ours, and its subtree gets the default transform-box back (it uses px transform-origins).
+ */
+function snakeInline(svg: string, y: number) {
+  const vb = svg.match(/viewBox="([^"]+)"/)![1];
+  const [, , w, h] = vb.split(/[\s,]+/).map(Number);
   const height = (GRID_W * h) / w;
-  const data = Buffer.from(svg).toString('base64');
+  const style = svg.match(/<style>([\s\S]*?)<\/style>/)![1]
+    .replace(/:root\{/, '.snk{')
+    .replace(/--([a-z][a-z0-9]*)/g, '--sk-$1')
+    .replace(/@keyframes ([a-z][a-z0-9]*)/g, '@keyframes sk-$1')
+    .replace(/animation-name:([a-z][a-z0-9]*)/g, 'animation-name:sk-$1')
+    .replace(/\.([a-z][a-z0-9]*)/g, (m, c) => (c === 'snk' ? m : `.sk-${c}`));
+  const inner = svg
+    .replace(/^[\s\S]*?<\/style>/, '')
+    .replace(/<\/svg>\s*$/, '')
+    .replace(/class="([^"]+)"/g, (_, c: string) => `class="${c.split(/\s+/).map((k) => `sk-${k}`).join(' ')}"`);
   return {
     height,
-    body: `<image class="reveal" style="animation-delay:.6s" x="${P}" y="${y}" width="${GRID_W}" height="${height.toFixed(1)}" href="data:image/svg+xml;base64,${data}"/>`,
+    css: `${style}
+  .snk *{transform-box:view-box}`,
+    body: `<svg class="snk reveal" style="animation-delay:.6s" x="${P}" y="${y}" width="${GRID_W}" height="${height.toFixed(1)}" viewBox="${vb}">${inner}</svg>`,
   };
 }
 
@@ -85,7 +101,7 @@ export async function live(data: Live, snake?: string) {
   // Contribution grid: snake when CI produced one, otherwise our heatmap.
   const gridLabelY = 336;
   const gridY = gridLabelY + 24;
-  const grid = snake ? snakeImage(snake, gridY - 12) : heatmap(data.days, gridY);
+  const grid = snake ? snakeInline(snake, gridY - 12) : { ...heatmap(data.days, gridY), css: '' };
   const legendX = W - P;
   const legend = ramp
     .map((c, i) => `<rect x="${legendX - 58 - (ramp.length - 1 - i) * 16}" y="${gridLabelY - 10}" width="11" height="11" rx="2.5" fill="${c}"/>`)
@@ -161,7 +177,8 @@ export async function live(data: Live, snake?: string) {
   .grow{transform-origin:left;animation:draw .8s var(--ease) both}
   @keyframes draw{from{transform:scaleX(0)}}
   .pop{animation:fade .5s ease-out both}
-  ${odometerCss}`;
+  ${odometerCss}
+  ${grid.css}`;
 
   const defs = `
   <radialGradient id="glowL"><stop offset="0" stop-color="${color.accent}" stop-opacity=".2"/><stop offset="1" stop-color="${color.accent}" stop-opacity="0"/></radialGradient>
