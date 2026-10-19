@@ -1,0 +1,58 @@
+name: Build profile
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 * * * *' # hourly; off the top of the hour, when Actions queues are busiest
+  workflow_dispatch:
+
+permissions:
+  contents: write # push the output branch
+  actions: write # keepalive below
+
+concurrency:
+  group: build-profile
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Contribution snake, coloured with the same orange ramp as src/sections/live.ts.
+      - uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: dist/snake.svg?color_snake=#F5F5F5&color_dots=#161616,#3d1002,#6e1c03,#ac2c04,#F53F06
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # PROFILE_TOKEN (optional, read-only PAT) lets counts include private repos;
+      # without it the cards use public data only.
+      - run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROFILE_TOKEN || github.token }}
+
+      # One orphan commit, force-pushed: the output branch never grows a history.
+      - name: Publish to output branch
+        working-directory: dist
+        run: |
+          git init -q -b output
+          git add -A
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit -qm "build ${GITHUB_SHA::7} @ $(date -u +%FT%TZ)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" output
+
+      # GitHub disables scheduled workflows after 60 days without repo activity;
+      # re-enabling via the API resets that timer.
+      - name: Keepalive
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/build.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}
