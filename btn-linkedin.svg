@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="188" height="60" viewBox="0 0 188 60" role="img" aria-labelledby="t d">
+<title id="t">LinkedIn</title>
+<desc id="d">LinkedIn: https://www.linkedin.com/in/tam11a</desc>
+<defs>
+  <clipPath id="frame"><rect width="188" height="60" rx="16"/></clipPath>
+  
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0"/>
+  </filter>
+  
+  <linearGradient id="run" gradientUnits="userSpaceOnUse" x1="-188" y1="0" x2="0" y2="0">
+    <stop offset="0" stop-color="#F53F06" stop-opacity="0"/><stop offset=".5" stop-color="#F53F06"/><stop offset="1" stop-color="#F53F06" stop-opacity="0"/>
+    <animateTransform attributeName="gradientTransform" type="translate" values="0 0;376 0;376 0" keyTimes="0;.45;1" dur="5s" begin="0.70s" repeatCount="indefinite"/>
+  </linearGradient>
+</defs>
+<style>
+  :root{--ease:cubic-bezier(.16,1,.3,1)}
+  *{transform-box:fill-box}
+  @font-face{font-family:'Anta';font-weight:400;src:url(data:font/woff2;base64,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) format('woff2')}
+  
+  .reveal{animation:fadeUp .9s var(--ease) both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+  
+  .ping{transform-origin:center;animation:ping 2s cubic-bezier(0,0,.2,1) infinite}
+  @keyframes ping{from{transform:scale(1);opacity:.9}to{transform:scale(3.2);opacity:0}}
+  .rule{transform-origin:left;animation:draw 1.2s var(--ease) both}
+  .bar{transform-origin:left;animation:draw .9s var(--ease) .35s both}
+  @keyframes draw{from{transform:scaleX(0)}}
+  .glow{transform-origin:center;animation:breathe 9s ease-in-out infinite alternate}
+  @keyframes breathe{from{opacity:.6;transform:scale(.92)}to{opacity:1;transform:scale(1.06)}}
+  .nudge{animation:nudge 2.6s var(--ease) 1.6s infinite}
+  @keyframes nudge{0%,55%,100%{transform:none}25%{transform:translate(3px,-3px)}}
+</style>
+<g clip-path="url(#frame)">
+  <rect width="188" height="60" fill="#000000"/>
+  
+  <rect x="1" y="1" width="186" height="58" rx="15" fill="none" stroke="url(#run)" stroke-width="1.5"/>
+  <rect x="22" y="20" width="20" height="20" rx="3.5" fill="#F53F06"/><path d="M27 28.5v7M31.5 35.5v-7M31.5 31.5q0-3 3-3t3 3v4" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/><circle cx="27" cy="25" r="1.3" fill="#000"/>
+  <text x="56" y="35" fill="#F5F5F5" style="font-family:'Anta';font-weight:400;font-size:13px;letter-spacing:1.4px">LINKEDIN</text>
+  <path class="nudge" d="M154 33l9-9m-6.75 0h6.75v6.75" fill="none" stroke="#71717A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="188" height="60" filter="url(#grain)" opacity="0.07"/>
+</g>
+<rect x=".5" y=".5" width="187" height="59" rx="16" fill="none" stroke="rgba(245,245,245,0.1)"/>
+</svg>

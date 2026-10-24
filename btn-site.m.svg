@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-labelledby="t d">
+<title id="t">Portfolio</title>
+<desc id="d">Portfolio: https://tam11a.dev</desc>
+<defs>
+  <clipPath id="frame"><rect width="96" height="96" rx="16"/></clipPath>
+  
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0"/>
+  </filter>
+  <linearGradient id="run" gradientUnits="userSpaceOnUse" x1="0" y1="48" x2="96" y2="48">
+      <stop offset=".3" stop-color="#F53F06" stop-opacity="0"/><stop offset=".5" stop-color="#F53F06"/><stop offset=".7" stop-color="#F53F06" stop-opacity="0"/>
+      <animateTransform attributeName="gradientTransform" type="rotate" from="0 48 48" to="360 48 48" dur="6s" begin="-1.2s" repeatCount="indefinite"/>
+    </linearGradient>
+</defs>
+<style>
+  :root{--ease:cubic-bezier(.16,1,.3,1)}
+  *{transform-box:fill-box}
+  
+  
+  .reveal{animation:fadeUp .9s var(--ease) both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+  
+  .ping{transform-origin:center;animation:ping 2s cubic-bezier(0,0,.2,1) infinite}
+  @keyframes ping{from{transform:scale(1);opacity:.9}to{transform:scale(3.2);opacity:0}}
+  .rule{transform-origin:left;animation:draw 1.2s var(--ease) both}
+  .bar{transform-origin:left;animation:draw .9s var(--ease) .35s both}
+  @keyframes draw{from{transform:scaleX(0)}}
+  .glow{transform-origin:center;animation:breathe 9s ease-in-out infinite alternate}
+  @keyframes breathe{from{opacity:.6;transform:scale(.92)}to{opacity:1;transform:scale(1.06)}}
+  .nudge{animation:nudge 2.6s var(--ease) 1.6s infinite}
+  @keyframes nudge{0%,55%,100%{transform:none}25%{transform:translate(3px,-3px)}}
+</style>
+<g clip-path="url(#frame)">
+  <rect width="96" height="96" fill="#000000"/>
+  
+  <rect x="1" y="1" width="94" height="94" rx="15" fill="none" stroke="url(#run)" stroke-width="2"/>
+  <g transform="translate(28 28) scale(2)"><circle cx="10" cy="10" r="9" fill="none" stroke="#F53F06" stroke-width="1.8"/><ellipse cx="10" cy="10" rx="4" ry="9" fill="none" stroke="#F53F06" stroke-width="1.5"/><path d="M1 10h18" stroke="#F53F06" stroke-width="1.5"/></g>
+  <rect width="96" height="96" filter="url(#grain)" opacity="0.07"/>
+</g>
+<rect x=".5" y=".5" width="95" height="95" rx="16" fill="none" stroke="rgba(245,245,245,0.1)"/>
+</svg>

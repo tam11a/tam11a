@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="188" height="60" viewBox="0 0 188 60" role="img" aria-labelledby="t d">
+<title id="t">Mail</title>
+<desc id="d">Mail: ibrahimsadiktamim@gmail.com</desc>
+<defs>
+  <clipPath id="frame"><rect width="188" height="60" rx="16"/></clipPath>
+  
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0"/>
+  </filter>
+  
+  <linearGradient id="run" gradientUnits="userSpaceOnUse" x1="-188" y1="0" x2="0" y2="0">
+    <stop offset="0" stop-color="#F53F06" stop-opacity="0"/><stop offset=".5" stop-color="#F53F06"/><stop offset="1" stop-color="#F53F06" stop-opacity="0"/>
+    <animateTransform attributeName="gradientTransform" type="translate" values="0 0;376 0;376 0" keyTimes="0;.45;1" dur="5s" begin="0.00s" repeatCount="indefinite"/>
+  </linearGradient>
+</defs>
+<style>
+  :root{--ease:cubic-bezier(.16,1,.3,1)}
+  *{transform-box:fill-box}
+  @font-face{font-family:'Anta';font-weight:400;src:url(data:font/woff2;base64,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) format('woff2')}
+  
+  .reveal{animation:fadeUp .9s var(--ease) both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+  
+  .ping{transform-origin:center;animation:ping 2s cubic-bezier(0,0,.2,1) infinite}
+  @keyframes ping{from{transform:scale(1);opacity:.9}to{transform:scale(3.2);opacity:0}}
+  .rule{transform-origin:left;animation:draw 1.2s var(--ease) both}
+  .bar{transform-origin:left;animation:draw .9s var(--ease) .35s both}
+  @keyframes draw{from{transform:scaleX(0)}}
+  .glow{transform-origin:center;animation:breathe 9s ease-in-out infinite alternate}
+  @keyframes breathe{from{opacity:.6;transform:scale(.92)}to{opacity:1;transform:scale(1.06)}}
+  .nudge{animation:nudge 2.6s var(--ease) 1.6s infinite}
+  @keyframes nudge{0%,55%,100%{transform:none}25%{transform:translate(3px,-3px)}}
+</style>
+<g clip-path="url(#frame)">
+  <rect width="188" height="60" fill="#000000"/>
+  
+  <rect x="1" y="1" width="186" height="58" rx="15" fill="none" stroke="url(#run)" stroke-width="1.5"/>
+  <rect x="22" y="23" width="20" height="14" rx="2.5" fill="none" stroke="#F53F06" stroke-width="1.8"/><path d="M23 25l9 6.5 9-6.5" fill="none" stroke="#F53F06" stroke-width="1.8" stroke-linejoin="round"/>
+  <text x="56" y="35" fill="#F5F5F5" style="font-family:'Anta';font-weight:400;font-size:13px;letter-spacing:1.4px">MAIL</text>
+  <path class="nudge" d="M154 33l9-9m-6.75 0h6.75v6.75" fill="none" stroke="#71717A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="188" height="60" filter="url(#grain)" opacity="0.07"/>
+</g>
+<rect x=".5" y=".5" width="187" height="59" rx="16" fill="none" stroke="rgba(245,245,245,0.1)"/>
+</svg>
