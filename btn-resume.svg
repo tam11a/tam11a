@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="188" height="60" viewBox="0 0 188 60" role="img" aria-labelledby="t d">
+<title id="t">Resume</title>
+<desc id="d">Resume: https://tam11a.dev/resume_ibrahimsadiktamim.pdf</desc>
+<defs>
+  <clipPath id="frame"><rect width="188" height="60" rx="16"/></clipPath>
+  
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0"/>
+  </filter>
+  
+  <linearGradient id="run" gradientUnits="userSpaceOnUse" x1="-188" y1="0" x2="0" y2="0">
+    <stop offset="0" stop-color="#F53F06" stop-opacity="0"/><stop offset=".5" stop-color="#F53F06"/><stop offset="1" stop-color="#F53F06" stop-opacity="0"/>
+    <animateTransform attributeName="gradientTransform" type="translate" values="0 0;376 0;376 0" keyTimes="0;.45;1" dur="5s" begin="1.40s" repeatCount="indefinite"/>
+  </linearGradient>
+</defs>
+<style>
+  :root{--ease:cubic-bezier(.16,1,.3,1)}
+  *{transform-box:fill-box}
+  @font-face{font-family:'Anta';font-weight:400;src:url(data:font/woff2;base64,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) format('woff2')}
+  
+  .reveal{animation:fadeUp .9s var(--ease) both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+  
+  .ping{transform-origin:center;animation:ping 2s cubic-bezier(0,0,.2,1) infinite}
+  @keyframes ping{from{transform:scale(1);opacity:.9}to{transform:scale(3.2);opacity:0}}
+  .rule{transform-origin:left;animation:draw 1.2s var(--ease) both}
+  .bar{transform-origin:left;animation:draw .9s var(--ease) .35s both}
+  @keyframes draw{from{transform:scaleX(0)}}
+  .glow{transform-origin:center;animation:breathe 9s ease-in-out infinite alternate}
+  @keyframes breathe{from{opacity:.6;transform:scale(.92)}to{opacity:1;transform:scale(1.06)}}
+  .nudge{animation:nudge 2.6s var(--ease) 1.6s infinite}
+  @keyframes nudge{0%,55%,100%{transform:none}25%{transform:translate(3px,-3px)}}
+</style>
+<g clip-path="url(#frame)">
+  <rect width="188" height="60" fill="#000000"/>
+  
+  <rect x="1" y="1" width="186" height="58" rx="15" fill="none" stroke="url(#run)" stroke-width="1.5"/>
+  <path d="M25 20h9l5 5v15h-14z" fill="none" stroke="#F53F06" stroke-width="1.8" stroke-linejoin="round"/><path d="M32 27v8m-3-3 3 3 3-3" fill="none" stroke="#F53F06" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="56" y="35" fill="#F5F5F5" style="font-family:'Anta';font-weight:400;font-size:13px;letter-spacing:1.4px">RESUME</text>
+  <path class="nudge" d="M154 33l9-9m-6.75 0h6.75v6.75" fill="none" stroke="#71717A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="188" height="60" filter="url(#grain)" opacity="0.07"/>
+</g>
+<rect x=".5" y=".5" width="187" height="59" rx="16" fill="none" stroke="rgba(245,245,245,0.1)"/>
+</svg>
