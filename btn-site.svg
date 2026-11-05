@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="188" height="60" viewBox="0 0 188 60" role="img" aria-labelledby="t d">
+<title id="t">Portfolio</title>
+<desc id="d">Portfolio: https://tam11a.dev</desc>
+<defs>
+  <clipPath id="frame"><rect width="188" height="60" rx="16"/></clipPath>
+  
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0"/>
+  </filter>
+  
+  <linearGradient id="run" gradientUnits="userSpaceOnUse" x1="-188" y1="0" x2="0" y2="0">
+    <stop offset="0" stop-color="#F53F06" stop-opacity="0"/><stop offset=".5" stop-color="#F53F06"/><stop offset="1" stop-color="#F53F06" stop-opacity="0"/>
+    <animateTransform attributeName="gradientTransform" type="translate" values="0 0;376 0;376 0" keyTimes="0;.45;1" dur="5s" begin="0.35s" repeatCount="indefinite"/>
+  </linearGradient>
+</defs>
+<style>
+  :root{--ease:cubic-bezier(.16,1,.3,1)}
+  *{transform-box:fill-box}
+  @font-face{font-family:'Anta';font-weight:400;src:url(data:font/woff2;base64,d09GMgABAAAAAAsMABEAAAAAFyQAAAqvAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGhYbgUQcKAZgAGQISgmcDBEICoUIhEELFAABNgIkAyQEIAWDUAcgDIEyG6QVUVSOulGUpMmo7IuDTO6dxTU4qOhYiY6tgvfHmZSSaPbuCElm/efrsj/31iu0ELg6EHuSigbRqGN1zyewGsCrj8TLr5WwG9CDf7v9tWUBZ5BIAm3NU6glISb2/I9t/odoCoROks75TJiJ9rhSdviqv3QKhJYs5yBvmAr0CgTJvzvt7TIW+kdd7weLCkiBo9wAySFySEtBkD5KWWeL+hW1u2rksD0/V9o3/ydXYnWqRMKjMBW2NSb3sunu/5vbA0qOc1s6TrYAqJAcSgJSB6o1upUkXJ2s9Y0EhrELwITJcrYTtZD6YYOJPz4bDQTACszLIBDU+vsDZuSiGmw0bd6G6Lnh24OwQwC3ivh6aYBmx28NQqvZ5dEFGBqoguHn1E/poKD1HUzz5lrl8AkKrmdIEIihWgETCHUoAEiMnCu2mgEZjD8oFammewtg8/qx4gl6GTIgF8nv3Eyh+Pll8t/SKiaGG2WNMv9/8k1xFjq2zbuvx0At4HAoXruLiJJfBKBDQrTnQ72QQP0EOiqccB6L6mjSavP+xC7bqma0/5z6O9GxjnSogx1AGLiLVQax8jzCCtx4cC2/rrwHhWVrX8jbyv/d8wMIPKVFlp7/xtjdc5SHvxLFy6S/lY3G7a+w1z+aDEhrbV+c9+AN0OYTgrDEAAE9bwIM8+YDEjR8k2b2bYszPFQpsfHMLLaUbsL8sCWsBnNWB8Tt1sRdXSwRX+eIhzmb7LPbD44IpsXJE6ZnJRq4TV/zFB66MiORISXCmCqzCOfs5Kc6DeLsLSL+NaWHUS7WC5Sj5JE8v/s7PYy6MaB03G6VXxdSvmwqf8tqYVAH0rGzZd2JfJ3PorMhbTQ+WyYyq7LT+nFtXopSKvVKzs8eAztWrsF9Ahd15dcJh0V8ZvxF/e2UNfmM37JUOQ81QylneModSDgt5oAMLYTwOgiVbxKqRTSLzvsM5YCia4tQamhqFXWCZXVd0XnqwVkGyE1/0T7UqP/vDanl9zoivk3ljavvcrLss/A/JCg5kzjFuFtABSZemNBlY9LazWTRBCxWuNpALSijNgMmSAth5/q3kEqx6/DnfLqozEEfZMZkGhMu4nnvNGRZ04lcawrPpmSACC9ajElFg6YLsWyNVvRl/NrykPzWnSe/PbaoBST/ANZZITtL81W+2Uak++hN8s58Pu8DDjTuOmKszANOQFnCwWfgNgmHxYxzC/dwBgEXRlsjna7fQlpjUsHFonFIcVm0gBvPP6Qm2vN8ElvHtgIePH+bnr8/UOC8lJ5RvWiYmn1MuOvjoRJxpQwIe2yOCpwPh+ZMSP4mNRIWBCofn9UsF3Y2vUFl7TqKOCfbnXDGwRVOmHOyFkutj/2e2CAem0MEOxOF0G63MGxr6Dr6kHBb1AK7RWwG56jyK3Jhu0xu27Mtxqg8eV8aKs07kHguLZ/IgXA0zF4IRHRBFCmYooRE0UJQjJApVigUJ1SKFxolCFN1Fsz0t0XJzz8kUwd9XSn7BrJPdAk3fifM6ZJq/J01HdtwJBVnQuVHk8M1VGs+TdQkTdYUTdU0TdcMzVRD0rlQ76yUFy1EZs1syf6gai8k11/z83GTSPLqNAMFkFY6k3VWb9tNff1J7RSnwlijrtn7jrztThQ0mxxmF+lyVtAt0s360+li6AZ0VQm2hds4yu/gUMLgY4/F3HcIAOOB3W7FYVbNs1IK9Vqhe4D8OwqUoTvQB8rFAojrp9+0Ao1l7pQ6rYBF2J+Oz57YyqrSF+czZHEqD2F27/lAJcAcERYRjnCRhzerHGDhha9jrkn9WA4mUVWkrt4iFIvMLxZDt0n479I3obvVfRNx91KO0YSZGpPYni0LPxBhcL7TxZ5ItxAsgyGzDioQrG7WpbdWvl9NL58cbVlvO8PMJeyYmcNOiyraQmWnqvQA2Wteq0A5IhZAuJKqcxddLZ/ZOVBthvEkIUfP+tvHXWqKMFOJJeQMVdVZtbYkMSM/EDymTr15Bx+oEbIdfBRfbfH0vSVmwXV6unOmtLl7qq5vG97pnLKg501rhn0b/DB1BvzDSyKY3rh3OanPXcsPMxcCG4ip37k3266Pt97sM24AlSmzsAGq0qhr9q9dHMvFIijsyH9NjUWY8003Gr2pYrUoNzvngqZend1O+wfehGbu8Qjm3PmfWHkwq8P3sBN7u+28r5T4jEjN1di4YBDVsrJ0ibfqDuy2/Gh1Zy/5wglXd2LPWdfS5pRsnLsJDWFRQBkJNoOKRlvuh7mFqdNyTCqGKmyDMxewZYpYx8neT2hicAWR1x2AL0gHNJpFyCElugNICoqmsg8Q0ECRlkSZHgCykijXn0DIS6JCDwBFSbqUHxpFGY0iQqOooFFXy2gRNS5TvTuAhqBkEwmGbMGQbRiyA0N2YcgeDNmHIQcwWofZ+6jaesnRVsFeQxhjmHqicbsEa9Y0ex9ompmQcxO0KKOaFLE0arAyatz1ChZtABjYOidpZ4L2ZVSbFg5GLY5GLU5GLc5OSBcTdDWhbrBLHe5GHR5GHZ5GHV5OSG8T9DGR/mbvV99qQ3uVmP0cj88PJPlifN3d9Vl7pfG9UnLH3Q/q2+SAQDdvcmDQ3YRcd0ndy7APgMCiZq7TeXkCFCFsXmdkjHafC3bNfJ8D9vss96B6i/bwsmXxWs+urNB9j6yuWmzPLS9DPLy0ZLbuq+1XlqpfJfmRFZa/hE9MSWg6CLITi7eOn7bOmJueB9aaMLFHXHrx6MIvJxe9B+z5hfmkpbcIGSrP0D4LaDvmt5xbODd/cGbmYDBKu3AjdOvBM7N3bLnj7OwtB0PB4C2Hzm5ZW//WQ8GXN7mCgS3d9wXbdrUVr3tLYPk3tiVol178K/pwYOCD4RcHB97/sG/4i4UvqjrbK5/TOzur4k7+kk4uPtz33ke9o1+1UNKfMXp3VLRlGj/x4pML6yeXTq7HAIB/hQTBkpgEEQYBri1gdnObK8zvlNWYLL/zyFwiN7WJvqxGZoUX8yAz5EtySmoUOyYWkpREMQ3GCJeUlhUJNZpfXAeDBNOkyB2EcIs2V4ovTc/p3skQEhELmoYs04UKZcDtsMsVoatqHFeRcO2F1c4MnF9Cbwbv1B7XoKP6f82hAQB+uOL7Zv7k1f8eLXQ9Nv+u7gaggEMi+6eKB8v4Tddr/wOAMLiZSQAT00k8T7/KbjLjEAwaXEGsIJ0DwA+jQbuod03EJi8AGFmsKD1LRQ8JJEwAduPqejhBw9nhDDv2D5eQi8eHC0RibriMbSKVwl4N2CDodsNy0GXcpDvMrfrdaseTb3WbaSFBOgqQi/zh4CrouL1+wrA7UGPIlOkUGnWk406WKs8oHr0MOSjBWM2IjHwmoa+Zrt+mHanGcb2g1tyKM6INQna5Z6emb5JTIP0KkV9fAR3bEMZXy111vPJDZk7UKOajuKNiSkhhVoLjW1jtWvmVyIsVk6ZJ6039iFyMcjV/4m9zz33juDHjhqJJx2jblwefzoCEwXRv5HkTd9/04WpXYB/Ri9176U3wduc+qPUHEM3IXM5/KEE4NDbXs5M4QrmVqf6EBgEwLJws2fDzP/YYSYDxJNPTnYG9/qcDdRoT6ZVHNVQzYOwx+7R66Lj2MEi8KR3ddpAHDz/kY5fC9syjuPnELV7YxyrzlccUGBsAAAA=) format('woff2')}
+  
+  .reveal{animation:fadeUp .9s var(--ease) both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+  
+  .ping{transform-origin:center;animation:ping 2s cubic-bezier(0,0,.2,1) infinite}
+  @keyframes ping{from{transform:scale(1);opacity:.9}to{transform:scale(3.2);opacity:0}}
+  .rule{transform-origin:left;animation:draw 1.2s var(--ease) both}
+  .bar{transform-origin:left;animation:draw .9s var(--ease) .35s both}
+  @keyframes draw{from{transform:scaleX(0)}}
+  .glow{transform-origin:center;animation:breathe 9s ease-in-out infinite alternate}
+  @keyframes breathe{from{opacity:.6;transform:scale(.92)}to{opacity:1;transform:scale(1.06)}}
+  .nudge{animation:nudge 2.6s var(--ease) 1.6s infinite}
+  @keyframes nudge{0%,55%,100%{transform:none}25%{transform:translate(3px,-3px)}}
+</style>
+<g clip-path="url(#frame)">
+  <rect width="188" height="60" fill="#000000"/>
+  
+  <rect x="1" y="1" width="186" height="58" rx="15" fill="none" stroke="url(#run)" stroke-width="1.5"/>
+  <circle cx="32" cy="30" r="9" fill="none" stroke="#F53F06" stroke-width="1.8"/><ellipse cx="32" cy="30" rx="4" ry="9" fill="none" stroke="#F53F06" stroke-width="1.5"/><path d="M23 30h18" stroke="#F53F06" stroke-width="1.5"/>
+  <text x="56" y="35" fill="#F5F5F5" style="font-family:'Anta';font-weight:400;font-size:13px;letter-spacing:1.4px">PORTFOLIO</text>
+  <path class="nudge" d="M154 33l9-9m-6.75 0h6.75v6.75" fill="none" stroke="#71717A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="188" height="60" filter="url(#grain)" opacity="0.07"/>
+</g>
+<rect x=".5" y=".5" width="187" height="59" rx="16" fill="none" stroke="rgba(245,245,245,0.1)"/>
+</svg>
